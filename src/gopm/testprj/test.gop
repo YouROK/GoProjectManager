@@ -1,0 +1,19 @@
+{
+"ProjectName":"Test Project",
+"MainPkgPath":"test",
+"GoPath":"/home/yourok/Dropbox/Projects/goide/src/goide/testprj",
+"GoRoot":"",
+"GoBin":"",
+"GoArch":"",
+"GoOS":"",
+"BuildOpt":{
+	"ShowCommand":"0",
+	"Race":"0",
+	"Jobs":"2",
+	"BuildCMD":"",
+	"BuildOutDir":"dist",
+	"BuildOutFile":"tes",
+	"BuildMode":"",
+	"LDFlags":""
+	}
+}

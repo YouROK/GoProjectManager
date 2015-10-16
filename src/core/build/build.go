@@ -98,6 +98,9 @@ func Build(p *project.Project) error {
 	}
 	if cfg.GoPath != "" {
 		cmd.Env = append(cmd.Env, "GOPATH="+cfg.GoPath)
+	} else {
+		gopath, _ := filepath.Abs(p.GetProjectPath())
+		cmd.Env = append(cmd.Env, "GOPATH="+gopath)
 	}
 
 	return cmd.Run()

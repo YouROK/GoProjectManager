@@ -1,7 +1,7 @@
 {
 "ProjectName":"Test Project",
 "MainPkgPath":"test",
-"GoPath":"/home/yourok/Dropbox/Projects/goide/src/goide/testprj",
+"GoPath":"",
 "GoRoot":"",
 "GoBin":"",
 "GoArch":"",

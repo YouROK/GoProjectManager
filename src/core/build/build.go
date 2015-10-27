@@ -2,10 +2,10 @@ package build
 
 import (
 	"core/project"
+	"core/run"
 	"fmt"
 	"io"
 	"os"
-	"os/exec"
 	"path/filepath"
 	"strings"
 )
@@ -68,40 +68,43 @@ func getArgs(p *project.Project) []string {
 	return cmdArgs
 }
 
-func Build(p *project.Project) error {
-	cfg := p.GetConfig()
-	cmdArgs := getArgs(p)
-	cmd := exec.Command(filepath.Join(cfg.GoBin+"go"), cmdArgs...)
-	//	cmd := exec.Command("env")
-
+func GetDepends(p *project.Project, downloadOnly bool) error {
+	cmdArgs := []string{"get"}
+	if downloadOnly {
+		cmdArgs = append(cmdArgs, "-d")
+	}
+	cmdArgs = append(cmdArgs, "-v")
+	cmdArgs = append(cmdArgs, p.GetConfig().MainPkgPath)
+	cmd := run.NewExec(filepath.Join(p.GetConfig().GoBin+"go"), cmdArgs, p.GetEnvs())
 	if StdOut == nil {
 		StdOut = os.Stdout
 	}
 
-	cmd.Stdout = StdOut
-	cmd.Stderr = StdOut
+	cmd.StdOut = StdOut
+	cmd.StdErr = StdOut
 
-	fmt.Fprintln(StdOut, "Build project:", cfg.ProjectName)
-	fmt.Fprintln(StdOut, "Build command:", filepath.Join(cfg.GoBin+"go"), cmdArgs)
+	fmt.Fprintln(StdOut, "Get project dependens:", p.GetConfig().ProjectName)
+	fmt.Fprintln(StdOut, "Get command:", filepath.Join(p.GetConfig().GoBin+"go"), cmdArgs)
+	fmt.Fprintln(StdOut, "Get:")
+
+	return cmd.Run()
+}
+
+func Build(p *project.Project) error {
+
+	cmdArgs := getArgs(p)
+	cmd := run.NewExec(filepath.Join(p.GetConfig().GoBin+"go"), cmdArgs, p.GetEnvs())
+	if StdOut == nil {
+		StdOut = os.Stdout
+	}
+
+	cmd.StdOut = StdOut
+	cmd.StdErr = StdOut
+
+	fmt.Fprintln(StdOut, "Build project:", p.GetConfig().ProjectName)
+	fmt.Fprintln(StdOut, "Build path:", p.GetProjectPath())
+	fmt.Fprintln(StdOut, "Build command:", filepath.Join(p.GetConfig().GoBin+"go"), cmdArgs)
 	fmt.Fprintln(StdOut, "Build:")
-
-	cmd.Env = append(cmd.Env, "PATH="+os.Getenv("PATH"))
-
-	if cfg.GoArch != "" {
-		cmd.Env = append(cmd.Env, "GOARCH="+cfg.GoArch)
-	}
-	if cfg.GoOS != "" {
-		cmd.Env = append(cmd.Env, "GOOS="+cfg.GoOS)
-	}
-	if cfg.GoRoot != "" {
-		cmd.Env = append(cmd.Env, "GOROOT="+cfg.GoRoot)
-	}
-	if cfg.GoPath != "" {
-		cmd.Env = append(cmd.Env, "GOPATH="+cfg.GoPath)
-	} else {
-		gopath, _ := filepath.Abs(p.GetProjectPath())
-		cmd.Env = append(cmd.Env, "GOPATH="+gopath)
-	}
 
 	return cmd.Run()
 }

@@ -2,10 +2,9 @@
 Test program
 */
 
-package main
+package test
 
 import (
-	"C"
 	"os"
 )
 
@@ -22,6 +21,8 @@ const (
 type Test struct {
 	test1 string
 	test2 string
+	TV1   string
+	TV2   string
 }
 
 type ITest interface {
@@ -38,11 +39,11 @@ type TTest6 *struct {
 	b int
 }
 
-func NewTest(fileName string) *Test {
-	p := Test{}
-	//	Tes
+func NewTest(fileName, path string) *Test {
+	p := &Test{}
 	p.test1 = "test11"
 	p.test2 = "test22"
+	p.t
 	return &p
 }
 
@@ -59,7 +60,7 @@ func (t *Test) Test3(int) int {
 }
 
 //export test
-func test() {
+func test(a, b int) {
 
 }
 

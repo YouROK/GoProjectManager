@@ -29,22 +29,6 @@ func getVarCandidates(src string, offset int) {
 	}
 }
 
-func getOffset(src string, line, col int) int {
-	l, c := 1, 1
-	for i, ch := range src {
-		//		fmt.Println(i, l, c, line, col)
-		if l >= line && c >= col {
-			return i
-		}
-		if ch == '\n' {
-			l++
-			c = 0
-		}
-		c++
-	}
-	return -1
-}
-
 func getTypeNode(root *ast.Ident) ast.Expr {
 	node := root
 	if node, ok := node.Obj.Decl.(*ast.AssignStmt); ok { //if assign

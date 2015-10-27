@@ -9,11 +9,11 @@ import (
 type Config struct {
 	ProjectName string
 	MainPkgPath string
-	GoPath      string
 	GoRoot      string
 	GoBin       string
 	GoArch      string
 	GoOS        string
+	Files       []string
 	BuildOpt    struct {
 		ShowCommand string
 		Race        string

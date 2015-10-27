@@ -1,11 +1,19 @@
 package codecomplete
 
 import (
-	"go/ast"
+	//	"go/ast"
+	"go/parser"
+	"go/token"
 )
 
-type Node struct {
-	parent  *Node
-	childs  []*Node
-	astNode ast.Node
+func getAllTypes(cur cursor) []string {
+	fset := token.NewFileSet()
+	node, _ := parser.ParseFile(fset, "", cur.src, 0)
+	list := []string{}
+	for _, k := range node.Scope.Objects {
+		if k.Kind.String() == "type" {
+			list = append(list, k.Name)
+		}
+	}
+	return list
 }
